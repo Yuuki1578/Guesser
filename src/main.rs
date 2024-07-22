@@ -1,11 +1,10 @@
 mod util;
 
+use std::cmp::Ordering;
+use std::io::{stdout, Error, ErrorKind, Write};
 use util::{debug_utils::*, game_utils::*, STATUS, VERSION};
 
-use std::io::{stdout, Error, ErrorKind, Write};
-
-use std::cmp::Ordering;
-
+#[allow(deprecated)]
 pub fn main() -> Result<(), Error> {
     let mut args = Argument::new();
 
@@ -81,7 +80,7 @@ pub fn main() -> Result<(), Error> {
         }
 
         _sliced => {
-            if _sliced.len() < 1{
+            if _sliced.len() < 1 {
                 eprintln!("{}", helper());
                 Ok(())
             } else {
@@ -89,7 +88,10 @@ pub fn main() -> Result<(), Error> {
                 let secret_number = random::<usize>(1..=parsed);
 
                 if parsed == 0 {
-                    return Err(Error::new(ErrorKind::Other, "error: limit must greater than 0"));
+                    return Err(Error::new(
+                        ErrorKind::Other,
+                        "error: limit must greater than 0",
+                    ));
                 }
 
                 println!("{}", start_usize(parsed));

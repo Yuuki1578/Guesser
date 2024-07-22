@@ -1,27 +1,29 @@
 pub const VERSION: &str = "0.1.0";
 pub const STATUS: &str = "STABLE";
 
+#[doc = "Provide basic event utility"]
 pub mod game_utils {
 
     use rand::{distributions::uniform::SampleUniform, Rng};
     use std::{
         cmp::{Ord, PartialOrd},
-        io,
+        io::stdin,
         ops::{
             Add, AddAssign, Div, DivAssign, Mul, MulAssign, RangeInclusive, Rem, RemAssign, Sub,
             SubAssign,
         },
     };
 
+    #[doc = "Get user input from stdin"]
     pub fn input() -> String {
         let mut user_input = String::new();
-        if let Ok(_) = io::stdin().read_line(&mut user_input) {
-            return user_input.trim().to_string();
+        match stdin().read_line(&mut user_input) {
+            Ok(_) => user_input.trim().to_owned(),
+            Err(_) => "".to_owned(),
         }
-
-        return String::from("");
     }
 
+    #[doc = "Create a random number with type Int"]
     pub fn random<Int>(range: RangeInclusive<Int>) -> Int
     where
         Int: Ord
@@ -38,10 +40,11 @@ pub mod game_utils {
             + PartialOrd
             + SampleUniform,
     {
-        let random_from_range: Int = rand::thread_rng().gen_range(range);
-        return random_from_range;
+        rand::thread_rng().gen_range(range)
     }
 
+    #[deprecated]
+    #[doc = "Parse &str into usize with delimeter (deprecated)"]
     pub fn parser_usize(text: &str) -> usize {
         let mut values: usize = 0;
 
@@ -63,21 +66,29 @@ pub mod game_utils {
     }
 }
 
+#[doc = "Provide basic debugging utility"]
 pub mod debug_utils {
-    use std::env;
+    use std::env::args;
 
     #[derive(Debug, Clone)]
+    #[deprecated]
+    #[doc = "Types for managing arguments (deprecated)"]
     pub struct Argument {
         list: Vec<String>,
     }
 
+    #[allow(deprecated)]
     impl Argument {
+        #[deprecated]
+        #[doc = "Create a new instances of argument (deprecated)"]
         pub fn new() -> Self {
             Self { list: Vec::new() }
         }
 
+        #[deprecated]
+        #[doc = "Collect arguments from CLI (deprecated)"]
         pub fn get(&mut self, limiter: usize) {
-            for (index, args) in env::args().enumerate() {
+            for (index, args) in args().enumerate() {
                 if index != limiter {
                     self.list.push(args);
                 } else {
@@ -86,10 +97,14 @@ pub mod debug_utils {
             }
         }
 
+        #[deprecated]
+        #[doc = "Remove some arguments from list (deprecated)"]
         pub fn remove(&mut self, index: usize) {
             let _ = self.list.remove(index);
         }
 
+        #[deprecated]
+        #[doc = "Pops out argument based on index (deprecated)"]
         pub fn expose(&self, index: usize) -> String {
             match self.list.get(index) {
                 Some(string) => string.clone(),
